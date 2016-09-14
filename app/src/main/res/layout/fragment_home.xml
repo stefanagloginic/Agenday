@@ -2,16 +2,25 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.example.stefana.agenday.HomeFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent" android:layout_height="match_parent"
+        android:padding="16dp"
+        android:layout_below="@+id/view"
+        android:layout_gravity="right|top"
+        android:weightSum="1">
+
+
+    </LinearLayout>
+
+    <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Home Fragment"
-        android:gravity = "center"
-        android:textSize = "30dp"
-        android:textStyle="bold"
+        android:id="@+id/rv"
         />
 
 </FrameLayout>

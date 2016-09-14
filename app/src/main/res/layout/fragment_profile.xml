@@ -2,16 +2,175 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.example.stefana.agenday.ProfileFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Profile Fragment"
-        android:gravity = "center"
-        android:textSize = "30dp"
-        android:textStyle="bold"
-        />
+        android:visibility="visible"
+        android:id="@+id/AccountInfo">
+        <ImageView
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:id="@+id/ivProfilePic"
+            android:clickable="true"
+            android:background="#000000"
+            android:paddingLeft="1dp"
+            android:paddingRight="1dp"
+            android:layout_marginTop="90dp"
+            android:visibility="visible"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:translationZ="1dp" />
+
+        <ImageView
+            android:layout_width="1000dp"
+            android:layout_height="272dp"
+            android:layout_weight="0.33"
+            android:id="@+id/imageView"
+            android:src="#c8e4ff"
+            android:visibility="visible"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <ProgressBar
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/pbLoadingImage"
+            android:layout_marginBottom="59dp"
+            android:layout_alignBottom="@+id/ivProfilePic"
+            android:layout_centerHorizontal="true"
+            android:indeterminateOnly = "true"
+
+            android:indeterminate="false"
+            android:max="2"
+            android:translationZ="2dp"
+            android:visibility="gone" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:id="@+id/tvFullName"
+            android:textAlignment="center"
+            android:textSize="37dp"
+            android:text="Stefana Gloginic"
+            android:layout_below="@+id/imageView"
+            android:layout_marginTop="29dp"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Age:"
+            android:id="@+id/tvAge"
+            android:layout_below="@+id/tvUsername"
+            android:layout_alignLeft="@+id/ivProfilePic"
+            android:layout_alignStart="@+id/ivProfilePic"
+            android:layout_marginTop="15dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="User:"
+            android:id="@+id/tvUsername"
+            android:layout_marginTop="29dp"
+            android:layout_below="@+id/tvFullName"
+            android:layout_alignLeft="@+id/tvAge"
+            android:layout_alignStart="@+id/tvAge"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="angel00"
+            android:id="@+id/tvuserUsername"
+            android:layout_above="@+id/tvAge"
+            android:layout_toRightOf="@+id/tvUsername"
+            android:layout_marginLeft="33dp"
+            android:layout_marginStart="33dp"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+           />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="21"
+            android:id="@+id/tvUserAges"
+            android:layout_alignBottom="@+id/tvAge"
+            android:layout_alignLeft="@+id/tvuserUsername"
+            android:layout_alignStart="@+id/tvuserUsername"
+            />
+
+        <android.support.design.widget.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/fabSettings"
+            android:src="@android:drawable/ic_input_add"
+            android:clickable="true"
+
+            app:backgroundTint="#c8e4ff"
+            android:tint="#ffffff"
+            android:layout_below="@+id/tvUserAges"
+            android:layout_toRightOf="@+id/ivProfilePic"></android.support.design.widget.FloatingActionButton>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/Settings"
+        android:visibility="gone"
+        android:layout_alignParentBottom="true"
+        android:background="#00ffffff"
+        android:clickable="true">
+
+
+
+        <android.support.design.widget.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/fabChangePassword"
+            android:src="@android:drawable/ic_menu_manage"
+            android:clickable="true"
+
+            android:focusable="true"
+            android:layout_marginBottom="58dp"
+            android:tint="#ffffff"
+            app:backgroundTint="#c8e4ff"
+            android:layout_alignParentBottom="true"
+            android:layout_toLeftOf="@+id/tvLogout"
+            android:layout_toStartOf="@+id/tvLogout"
+            android:layout_marginRight="15dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Change Password"
+            android:id="@+id/tvLogout"
+            android:textSize="25dp"
+            android:textStyle="bold"
+            android:typeface="normal"
+            android:textColor="#355f88"
+            android:layout_marginRight="59dp"
+            android:layout_marginEnd="59dp"
+            android:layout_alignBottom="@+id/fabChangePassword"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginBottom="10dp" />
+
+    </RelativeLayout>
 
 </FrameLayout>
