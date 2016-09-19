@@ -3,8 +3,13 @@ package com.example.stefana.agenday;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.ShapeDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -46,6 +51,13 @@ public class HomeFragment extends Fragment {
         recyclerView = (RecyclerView) view.findViewById(R.id.rv);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(layoutManager); //might want to use itemanimator soon (will allow swipe feature)
+
+        Drawable dividerDrawable = ContextCompat.getDrawable(getContext(), R.drawable.dividerdrawable);
+
+        RecyclerView.ItemDecoration dividerItemDecoration = new DividerItemDecoration(dividerDrawable);
+        recyclerView.addItemDecoration(dividerItemDecoration);
+
+
 
         //now I will specify the adapter..for which I will make a class
         ArrayList<FakeCard> fakecard = new ArrayList<>();
