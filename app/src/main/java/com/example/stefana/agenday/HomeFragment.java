@@ -45,7 +45,7 @@ public class HomeFragment extends Fragment {
 
         recyclerView = (RecyclerView) view.findViewById(R.id.rv);
         recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setLayoutManager(layoutManager); //might want to use itemanimator soon (will allow swipe feature)
 
         //now I will specify the adapter..for which I will make a class
         ArrayList<FakeCard> fakecard = new ArrayList<>();
