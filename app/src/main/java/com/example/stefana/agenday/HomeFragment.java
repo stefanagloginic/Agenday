@@ -28,8 +28,7 @@ public class HomeFragment extends Fragment {
     //new
     private RecyclerView recyclerView;
     private MyAdapter adapter;
-    private RecyclerView.LayoutManager layoutManager;
-
+    private Context context;
     public HomeFragment() {
         // Required empty public constructor
     }
@@ -37,7 +36,7 @@ public class HomeFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        layoutManager = new LinearLayoutManager(context);
+        this.context = context;
     }
 
     @Override
@@ -50,7 +49,7 @@ public class HomeFragment extends Fragment {
 
         recyclerView = (RecyclerView) view.findViewById(R.id.rv);
         recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(layoutManager); //might want to use itemanimator soon (will allow swipe feature)
+        recyclerView.setLayoutManager(new LinearLayoutManager(context)); //might want to use itemanimator soon (will allow swipe feature)
 
         Drawable dividerDrawable = ContextCompat.getDrawable(getContext(), R.drawable.dividerdrawable);
 
