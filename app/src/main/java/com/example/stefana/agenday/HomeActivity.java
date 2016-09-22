@@ -80,6 +80,13 @@ public class HomeActivity extends AppCompatActivity {
         /*  switch uses the requestCode provided by the requestPermission functions which is the private field
             in this case it is the MY_PERMISSIONS_REQUEST_ACCESS_COARSE_LOCATION
         */
+
+        if(permissions.length == 0 && grantResults.length == 0){
+            //android dismisses the permissions dialog when oritentation changes by sending through
+            //empty arrays
+            return;
+        }
+
         switch (requestCode) {
             case MY_PERMISSIONS_REQUEST_ACCESS_COARSE_lOCATION: {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
