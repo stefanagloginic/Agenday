@@ -49,8 +49,7 @@ public class HomeFragment extends Fragment implements OnConnectionFailedListener
     //a tag to identify boolean resolvingConnectionError from Bundle
     private static final String STATE_RESOLVING_CONNECTION_ERROR = "resolving_error";
 
-    //set tag to access fragment from inner class
-    private static final String HOME_FRAGMENT_TAG = "home_fragment";
+
     private RecyclerView recyclerView;
     private MyAdapter adapter;
     private Context context;
@@ -80,13 +79,12 @@ public class HomeFragment extends Fragment implements OnConnectionFailedListener
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        //set tag for this particular fragment
-
 
         //first grab anything from savedInstanceStateBundle
         //in this case resolvingConnectionError's State
-        resolvingConnectionError = savedInstanceState != null &&
-                savedInstanceState.getBoolean(STATE_RESOLVING_CONNECTION_ERROR);
+        if(savedInstanceState != null){
+            resolvingConnectionError = savedInstanceState.getBoolean(STATE_RESOLVING_CONNECTION_ERROR);
+        }
 
         //going to create an instance of the googleapiclient
         if (googleApiClient == null) {
@@ -106,8 +104,10 @@ public class HomeFragment extends Fragment implements OnConnectionFailedListener
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(context)); //might want to use itemanimator soon (will allow swipe feature)
 
+        //access drawable to create divider on below cardviews
         Drawable dividerDrawable = ContextCompat.getDrawable(getContext(), R.drawable.dividerdrawable);
 
+        //crate a decorator and add it to recyclerview
         RecyclerView.ItemDecoration dividerItemDecoration = new DividerItemDecoration(dividerDrawable);
         recyclerView.addItemDecoration(dividerItemDecoration);
 
@@ -136,11 +136,13 @@ public class HomeFragment extends Fragment implements OnConnectionFailedListener
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
+        //make sure you have access to coarse location
         if (ContextCompat.checkSelfPermission(context,
                 Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+
             Location lastLocation = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
             if (lastLocation != null) {
-                //run a search for items
+                //run a search for items that should be on cardview
                 ArrayList<FakeCard> fakecard = new ArrayList<>();
                 initializeData(fakecard);
 
@@ -149,8 +151,6 @@ public class HomeFragment extends Fragment implements OnConnectionFailedListener
 
                 adapter = new MyAdapter(fakecard);
                 recyclerView.setAdapter(adapter);
-                if(resolvingConnectionError == false)
-                    onConnectionFailed(new ConnectionResult(ConnectionResult.INVALID_ACCOUNT));
 
             } else {
                 //googleapi could not get user location
@@ -185,30 +185,21 @@ public class HomeFragment extends Fragment implements OnConnectionFailedListener
     private void showErrorDialog(int errorCode) {
         //build dialog for error message
         ErrorDialogFragment dialogFragment = new ErrorDialogFragment();
-        dialogFragment.setParentFragment(this);
         // Pass the error that should be displayed
         Bundle args = new Bundle();
         args.putInt(DIALOG_ERROR, errorCode);
         dialogFragment.setArguments(args);
-        dialogFragment.show(getActivity().getSupportFragmentManager() ,"errordialog");
+        dialogFragment.show(getChildFragmentManager() ,"errordialog");
     }
 
     public void onErrorDialogDismissed(){
-        resolvingConnectionError = true;
+        resolvingConnectionError = false;
     }
 
-    /*dialog fragment should be static because it needs to access function from
-      outer class
-    */
+
     public static class ErrorDialogFragment extends DialogFragment {
-        HomeFragment homeFragment;
 
         public ErrorDialogFragment(){}
-
-        public void setParentFragment(HomeFragment homeFragment){
-            this.homeFragment = homeFragment;
-        }
-
 
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -219,7 +210,8 @@ public class HomeFragment extends Fragment implements OnConnectionFailedListener
 
         @Override
         public void onDismiss(DialogInterface dialog) {
-                homeFragment.onErrorDialogDismissed();
+            super.onDismiss(dialog);
+            ((HomeFragment)getParentFragment()).onErrorDialogDismissed();
         }
     }
 
