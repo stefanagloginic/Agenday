@@ -45,8 +45,12 @@ public class HomeFragment extends Fragment implements OnConnectionFailedListener
     //TAG for fragment
     private static final String DIALOG_ERROR = "dialog_error";
     //bool track if error is being resolved currently
-    private boolean resolvingConnectionError;
+    private boolean resolvingConnectionError = false;
+    //a tag to identify boolean resolvingConnectionError from Bundle
+    private static final String STATE_RESOLVING_CONNECTION_ERROR = "resolving_error";
 
+    //set tag to access fragment from inner class
+    private static final String HOME_FRAGMENT_TAG = "home_fragment";
     private RecyclerView recyclerView;
     private MyAdapter adapter;
     private Context context;
@@ -55,6 +59,15 @@ public class HomeFragment extends Fragment implements OnConnectionFailedListener
 
     public HomeFragment() {
         // Required empty public constructor
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        //need to save boolean resolvingConnectionError state
+        //when user rotates phone and orientation changes
+        outState.putBoolean(STATE_RESOLVING_CONNECTION_ERROR, resolvingConnectionError);
+
     }
 
     @Override
@@ -67,6 +80,13 @@ public class HomeFragment extends Fragment implements OnConnectionFailedListener
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        //set tag for this particular fragment
+
+
+        //first grab anything from savedInstanceStateBundle
+        //in this case resolvingConnectionError's State
+        resolvingConnectionError = savedInstanceState != null &&
+                savedInstanceState.getBoolean(STATE_RESOLVING_CONNECTION_ERROR);
 
         //going to create an instance of the googleapiclient
         if (googleApiClient == null) {
@@ -129,6 +149,8 @@ public class HomeFragment extends Fragment implements OnConnectionFailedListener
 
                 adapter = new MyAdapter(fakecard);
                 recyclerView.setAdapter(adapter);
+                if(resolvingConnectionError == false)
+                    onConnectionFailed(new ConnectionResult(ConnectionResult.INVALID_ACCOUNT));
 
             } else {
                 //googleapi could not get user location
@@ -163,23 +185,29 @@ public class HomeFragment extends Fragment implements OnConnectionFailedListener
     private void showErrorDialog(int errorCode) {
         //build dialog for error message
         ErrorDialogFragment dialogFragment = new ErrorDialogFragment();
-
+        dialogFragment.setParentFragment(this);
         // Pass the error that should be displayed
         Bundle args = new Bundle();
         args.putInt(DIALOG_ERROR, errorCode);
         dialogFragment.setArguments(args);
-        dialogFragment.show(getFragmentManager(),"errordialog");
+        dialogFragment.show(getActivity().getSupportFragmentManager() ,"errordialog");
     }
 
     public void onErrorDialogDismissed(){
-        resolvingConnectionError = false;
+        resolvingConnectionError = true;
     }
 
     /*dialog fragment should be static because it needs to access function from
       outer class
     */
     public static class ErrorDialogFragment extends DialogFragment {
+        HomeFragment homeFragment;
+
         public ErrorDialogFragment(){}
+
+        public void setParentFragment(HomeFragment homeFragment){
+            this.homeFragment = homeFragment;
+        }
 
 
         @Override
@@ -191,7 +219,7 @@ public class HomeFragment extends Fragment implements OnConnectionFailedListener
 
         @Override
         public void onDismiss(DialogInterface dialog) {
-            ((HomeFragment)getParentFragment()).onErrorDialogDismissed();
+                homeFragment.onErrorDialogDismissed();
         }
     }
 
