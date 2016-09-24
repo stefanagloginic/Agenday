@@ -1,10 +1,15 @@
 package com.example.stefana.agenday;
 
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.List;
@@ -26,10 +31,17 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) { //here i am just
+    public void onBindViewHolder(final ViewHolder holder, final int position) { //here i am just
         holder.description.setText(fakecard.get(position).description);
         holder.title.setText(fakecard.get(position).title);
        // holder.rating.setText(fakecard.get(position).rating);
+
+        holder.image.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+                showPopupMenu(holder.image, position);
+            }
+        });
     }
 
     @Override
@@ -47,13 +59,35 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         TextView title;
        // TextView rating;
         TextView description;
+        public ImageView image;
 
         public ViewHolder(View v){
             super(v);
             title = (TextView) v.findViewById(R.id.title); //need to have a title in the XML...
             //rating = (TextView) v.findViewById(R.id.rating);
             description = (TextView) v.findViewById(R.id.description);
-
+            //obtaining the overflow button
+            image = (ImageButton) v.findViewById(R.id.imageButton);
         }
+    }
+
+    private void showPopupMenu(View view, int position){
+        //create the menu and inflater...then display
+        PopupMenu popup = new PopupMenu(view.getContext(), view);
+        MenuInflater inflater = popup.getMenuInflater();
+        inflater.inflate(R.menu.overflow_menu, popup.getMenu());
+
+        //when something within the menu is clicked..defines what happens next
+        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener(){
+            @Override
+            public boolean onMenuItemClick(MenuItem item){
+                switch(item.getItemId()) {
+                    case R.id.add_to_schedule:
+                        return true;
+                }
+                return false;
+            }
+        });
+        popup.show();
     }
 }
