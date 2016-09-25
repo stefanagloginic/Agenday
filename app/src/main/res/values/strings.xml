@@ -4,4 +4,8 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="could_not_access_location">Could not access location</string>
+    <string name="consumer_key">xKdyK4T_BsvjaSBRzQ_zAQ</string>
+    <string name="consumer_secret">Yu0kH3-gMOSjhBvvMDVfYPZ7wHE</string>
+    <string name="token">G132JMQGSyigFYciRymaN6hSFzOAR19j</string>
+    <string name="token_secret">mqy7IJPq_8cXyZrBm0YVSSp6lII</string>
 </resources>

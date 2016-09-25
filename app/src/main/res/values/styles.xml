@@ -11,5 +11,16 @@
     <style name="MyTabStyle" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
 
         <item name="android:textSize">20dp</item>
+
+    </style>
+
+    <style name="MyActionBarTheme"
+        parent="Theme.AppCompat.Light">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="windowActionBar">false</item>
+        <item name="theme">@style/ThemeOverlay.AppCompat.Dark.ActionBar</item>
+        <item name="android:background">#FE0367FC</item>
     </style>
 </resources>

@@ -12,16 +12,17 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by Stefana on 9/12/2016.
  */
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
-    public List<FakeCard> fakecard; //give access to list of events
+    public ArrayList<Event> event; //give access to list of events
 
-    public MyAdapter(List<FakeCard> fakecard){
-        this.fakecard = fakecard; //in constructor bind adapter to list of events (aka cards)
+    public MyAdapter(ArrayList<Event> event){
+        this.event = event; //in constructor bind adapter to list of events (aka cards)
     }
 
     @Override
@@ -32,8 +33,8 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) { //here i am just
-        holder.description.setText(fakecard.get(position).description);
-        holder.title.setText(fakecard.get(position).title);
+        holder.description.setText(event.get(position).getDescription());
+        holder.title.setText(event.get(position).getTitle());
        // holder.rating.setText(fakecard.get(position).rating);
 
         holder.image.setOnClickListener(new View.OnClickListener(){
@@ -46,7 +47,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
 
     @Override
     public int getItemCount() {
-        return fakecard.size(); //change this to amount of cards (events) currently present
+        return event.size(); //change this to amount of cards (events) currently present
     }
 
     @Override

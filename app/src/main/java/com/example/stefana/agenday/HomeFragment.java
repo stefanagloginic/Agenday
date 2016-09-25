@@ -33,8 +33,19 @@ import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
 import com.google.android.gms.location.LocationServices;
+import com.yelp.clientlib.connection.YelpAPI;
+import com.yelp.clientlib.connection.YelpAPIFactory;
+import com.yelp.clientlib.entities.Business;
+import com.yelp.clientlib.entities.SearchResponse;
+import com.yelp.clientlib.entities.options.CoordinateOptions;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -126,14 +137,6 @@ public class HomeFragment extends Fragment implements OnConnectionFailedListener
         super.onStop();
     }
 
-    private void initializeData(ArrayList<FakeCard> fakecards) {
-        fakecards.add(new FakeCard("Coldplay playing in CA, LA on Monday", "Concert"));
-        fakecards.add(new FakeCard("Enjoy our Greek cuisine in San Fran", "Greek Restaurant"));
-        fakecards.add(new FakeCard("Torture yourself at the stairs of hell in Culver City", "Hike"));
-        fakecards.add(new FakeCard("Enjoy paradise", "Vacation"));
-
-    }
-
     @Override
     public void onConnected(@Nullable Bundle bundle) {
         //make sure you have access to coarse location
@@ -143,14 +146,10 @@ public class HomeFragment extends Fragment implements OnConnectionFailedListener
             Location lastLocation = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
             if (lastLocation != null) {
                 //run a search for items that should be on cardview
-                ArrayList<FakeCard> fakecard = new ArrayList<>();
-                initializeData(fakecard);
 
-                fakecard.add(new FakeCard("Latitude: " + Double.toString(lastLocation.getLatitude())
-                        , "Longitude: " + Double.toString(lastLocation.getLongitude())));
-
-                adapter = new MyAdapter(fakecard);
-                recyclerView.setAdapter(adapter);
+                double lat = lastLocation.getLatitude();
+                double lon = lastLocation.getLongitude();
+                this.setUpYelpAPI(lon, lat);
 
             } else {
                 //googleapi could not get user location
@@ -233,4 +232,50 @@ public class HomeFragment extends Fragment implements OnConnectionFailedListener
     public void onConnectionSuspended(int i) {
 
     }
+
+    private void setUpYelpAPI(double lon, double lat){
+        YelpAPIFactory apiFactory = new YelpAPIFactory(this.getString(R.string.consumer_key),
+                this.getString(R.string.consumer_secret), this.getString(R.string.token),
+                this.getString(R.string.token_secret));
+        YelpAPI yelpAPI = apiFactory.createAPI();
+
+
+        Callback callback = createCallback();
+
+
+        CoordinateOptions coordinate = CoordinateOptions.builder()
+                .latitude(lat)
+                .longitude(lon).build();
+        Map<String, String> params = new HashMap<>();
+        params.put("limit", "3");
+
+
+        Call<SearchResponse> call = yelpAPI.search(coordinate, params);
+        call.enqueue(callback);
+    }
+
+    private Callback createCallback(){
+        Callback<SearchResponse> callback = new Callback<SearchResponse>() {
+            @Override
+            public void onResponse(Call<SearchResponse> call, Response<SearchResponse> response) {
+                SearchResponse searchResponse = response.body();
+                ArrayList<Business> businesses = searchResponse.businesses();
+                ArrayList<Event> events = new ArrayList<>();
+                for(Business i : businesses){
+                    events.add(new Event(i));
+                }
+                adapter = new MyAdapter(events);
+                recyclerView.setAdapter(adapter);
+                // Update recyclerview with business
+            }
+            @Override
+            public void onFailure(Call<SearchResponse> call, Throwable t) {
+                // HTTP error happened, do something to handle it.
+            }
+        };
+
+        return callback;
+    }
+
+
 }

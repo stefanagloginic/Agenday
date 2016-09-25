@@ -16,6 +16,14 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 
+import com.yelp.clientlib.connection.*;
+
+import java.io.BufferedOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 
 public class HomeActivity extends AppCompatActivity {
@@ -24,6 +32,9 @@ public class HomeActivity extends AppCompatActivity {
     private ViewPager viewPager;
     private ViewPagerAdapter viewPagerAdapter;
     final private int MY_PERMISSIONS_REQUEST_ACCESS_COARSE_lOCATION = 97;
+
+    public HomeActivity() throws MalformedURLException {
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +57,6 @@ public class HomeActivity extends AppCompatActivity {
         }
 
     }
-
     private void requestCoarseLocationPermission(){
         if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_COARSE_LOCATION)) {
                 //if statement checks if the user has previously denied the permission
